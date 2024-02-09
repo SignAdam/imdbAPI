@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du film</title>
+</head>
+<body>
+    <div id="movieDetails"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const imdbID = params.get('imdbID');
+
+        if (imdbID) {
+            fetch(`http://www.omdbapi.com/?apikey=d0da5fb8&i=${imdbID}`)
+                .then(response => response.json())
+                .then(movie => {
+                    const movieDetails = document.getElementById('movieDetails');
+                    movieDetails.innerHTML = `
+                        <img src="${movie.Poster}" alt="${movie.Title}">
+                        <h2>${movie.Title}</h2>
+                        <p>${movie.Plot}</p>
+                        <p><strong>Durée:</strong> ${movie.Runtime}</p>
+                        <p><strong>Genre:</strong> ${movie.Genre}</p>
+                        <p><strong>Année:</strong> ${movie.Year}</p>
+                        <p><strong>Auteurs:</strong> ${movie.Writer}</p>
+                        <p><strong>Note:</strong> ${movie.imdbRating}/10</p>
+
+                    `;
+                })
+                .catch(error => console.error(error));
+        }
+    </script>
+</body>
+</html>
